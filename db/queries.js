@@ -44,4 +44,18 @@ async function getId(user_id) {
   }
 }
 
-module.exports = { addUserData, getUser, getId };
+async function addFolder(userId, folderName) {
+  try {
+    await prisma.folder.create({
+      data: {
+        userId: userId,
+        name: folderName,
+      },
+    });
+  } catch (error) {
+    console.error("error adding folder");
+    throw error;
+  }
+}
+
+module.exports = { addUserData, getUser, getId, addFolder };

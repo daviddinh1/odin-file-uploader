@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Create Folder</title>
+</head>
+<body>
+ <% if(user){ %>
+  <form action="/createfolder" method="POST">
+   <label for="folderName">Please Enter a Folder Name: </label>
+   <input id="createfolder" type="text" name="folderName">
+
+   <button type="submit">Submit</button>
+  </form>
+ <% }else{ %>
+  <a href="/login">Please Sign in</a>
+ <% } %>
+ 
+</body>
+</html>

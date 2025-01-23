@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Home</title>
+</head>
+<body>
+ <% if(user){ %>
+  <div>Hi <%=user.username%></div>
+  <a href="/fileupload">Go Upload a file here!</a>
+  <a href="/logout">Log out here</a>
+ <%} else{ %>
+  <div>Please <a href="login">sign in</a></div>
+ <% } %>
+ 
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>File Uploader</title>
+</head>
+<body>
+  <% if(user){ %>
+  <form action="/fileupload" method="POST" enctype="multipart/form-data">
+   <label for="uploaded_file">File Uploader</label>
+   <input type="file" name="uploaded_file">
+   <button type="submit">Submit</button>
+  </form>
+  <% }else{ %>
+   <div>Please <a href="/login">Sign In</a> to upload a file</div>
+  <% } %>
+</body>
+</html>
