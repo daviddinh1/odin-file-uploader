@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title><%= folderName %></title>
+</head>
+<body>
+ <div>This displays the folder, we are currently in the <%= folderName %></div>
+ <% for(let i = 0; i < files.length ; i++){ %>
+  <div>The File name is :<%= files[i].filename %></div>
+  <div>The size of the file is: <%= files[i].size %></div>
+  <form action="/userfolder/<%=folderName %>/download" method="GET">
+    <input type="hidden" name="fileName" value="<%=files[i].filename%>">
+    <button type="submit">Download</button>
+  </form>
+ <%}%>
+</body>
+</html>

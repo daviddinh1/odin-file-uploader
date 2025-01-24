@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title><%= user.username%> Folders</title>
+</head>
+<body>
+ <% if(user){ %>
+  <% for(let i = 0; i < folderObj.length ; i++){ %>
+   <a href="/userfolder/<%=folderObj[i].name %>"><%=folderObj[i].name %></a>
+   <a href="/fileupload/<%=folderObj[i].id%>">Upload a folder here</a>
+   <form action="/userfolder/delete" method="POST">
+    <input type="hidden" name="folderId" value="<%=folderObj[i].id%>">
+    <button type="submit">Delete</button>
+   </form>
+  <% } %>
+ <%} else {%>
+  <a href="/login">Please Sign in</a>
+  <% } %>
+
+ 
+</body>
+</html>

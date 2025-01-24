@@ -1,6 +1,7 @@
 const { render } = require("ejs");
 const db = require("../db/queries");
 const bcrypt = require("bcryptjs");
+const path = require("path");
 
 async function getSignUp(req, res) {
   res.render("signup");
@@ -23,7 +24,7 @@ async function renderHome(req, res) {
 }
 
 async function renderFileUpload(req, res) {
-  res.render("fileupload", { user: req.user });
+  res.render("fileupload", { user: req.user, folderId: req.params.folderId });
 }
 
 async function renderCreateFolder(req, res) {
@@ -41,6 +42,65 @@ async function createFolder(req, res, next) {
   }
 }
 
+async function renderUserFolders(req, res, next) {
+  try {
+    const folderObj = await db.getAllFolders(req.user.id);
+    res.render("userfolder", { user: req.user, folderObj: folderObj });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function renderIndivFolder(req, res, next) {
+  try {
+    const folderName = req.params.foldername;
+    const files = await db.getFolderFiles(folderName);
+    res.render("indivfolder", { folderName: folderName, files: files });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function deleteFolder(req, res, next) {
+  try {
+    let { folderId } = req.body;
+    folderId = parseInt(folderId);
+
+    await db.deleteFolder(folderId);
+    res.redirect("userfolder");
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function addFileToFolder(req, res, next) {
+  try {
+    const filename = req.file.filename;
+    const size = req.file.size;
+    const folderId = parseInt(req.params.folderId);
+    await db.addFile(filename, size, folderId);
+    res.redirect("userfolder");
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function downloadFile(req, res, next) {
+  try {
+    const { fileName } = req.query;
+    console.log("the filename is:", fileName);
+    const filePath = path.join("files", fileName);
+    console.log("checking if correct path is outputted:", filePath);
+    res.download(filePath, fileName, (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Error serving file");
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   getSignUp,
   addUserData,
@@ -48,4 +108,9 @@ module.exports = {
   renderFileUpload,
   renderCreateFolder,
   createFolder,
+  renderUserFolders,
+  renderIndivFolder,
+  deleteFolder,
+  addFileToFolder,
+  downloadFile,
 };

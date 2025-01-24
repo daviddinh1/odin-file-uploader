@@ -58,4 +58,76 @@ async function addFolder(userId, folderName) {
   }
 }
 
-module.exports = { addUserData, getUser, getId, addFolder };
+async function getAllFolders(userId) {
+  try {
+    const folders = await prisma.folder.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    console.log("this contains all of the folders", folders);
+    return folders;
+  } catch (error) {
+    console.log("couldnt get all of the folders");
+    throw error;
+  }
+}
+
+async function deleteFolder(folderId) {
+  try {
+    await prisma.folder.delete({
+      where: {
+        id: folderId,
+      },
+    });
+  } catch (error) {
+    console.error("could not delete folder");
+    throw error;
+  }
+}
+
+async function addFile(filename, size, folderId) {
+  try {
+    await prisma.file.create({
+      data: {
+        folderId: folderId,
+        filename: filename,
+        size: size,
+      },
+    });
+  } catch (error) {
+    console.error("adding file is not working");
+    throw error;
+  }
+}
+
+async function getFolderFiles(folderName) {
+  try {
+    const folder = await prisma.folder.findUnique({
+      where: {
+        name: folderName,
+      },
+    });
+    const folderId = folder.id;
+    const files = await prisma.file.findMany({
+      where: {
+        folderId: folderId,
+      },
+    });
+    return files;
+  } catch (error) {
+    console.error("cannot get folder files");
+    throw error;
+  }
+}
+
+module.exports = {
+  addUserData,
+  getUser,
+  getId,
+  addFolder,
+  getAllFolders,
+  deleteFolder,
+  addFile,
+  getFolderFiles,
+};

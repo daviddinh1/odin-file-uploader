@@ -11,14 +11,23 @@ indexRouter.get("/", indexController.renderHome);
 indexRouter.get("/signup", indexController.getSignUp);
 indexRouter.post("/signup", indexController.addUserData);
 
-indexRouter.get("/fileupload", indexController.renderFileUpload);
-indexRouter.post("/fileupload", upload.single("uploaded_file"), (req, res) => {
-  //for the function add it in controllers when done
-  console.log(req.file, req.body);
-  res.send("check file ecosystem");
-});
+indexRouter.get("/fileupload/:folderId", indexController.renderFileUpload);
+indexRouter.post(
+  "/fileupload/:folderId",
+  upload.single("uploaded_file"),
+  indexController.addFileToFolder
+);
 
 indexRouter.get("/createfolder", indexController.renderCreateFolder);
 indexRouter.post("/createfolder", indexController.createFolder);
+//figure out how to go to another route for the folder and allow users to upload files to that route
+indexRouter.get("/userfolder", indexController.renderUserFolders);
+indexRouter.post("/userfolder/delete", indexController.deleteFolder);
+
+indexRouter.get("/userfolder/:foldername", indexController.renderIndivFolder);
+indexRouter.get(
+  "/userfolder/:foldername/download",
+  indexController.downloadFile
+);
 
 module.exports = indexRouter;
